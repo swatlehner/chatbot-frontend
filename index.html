@@ -46,11 +46,11 @@
         <button onclick="clearChat()">🧹 Clear Chat</button>
     </div>
 
-    <select id="manualSelect" onchange="switchManual()">
-        <option value="manual_a">SuperVario</option>
-        <option value="manual_b">POLARO</option>
-        <option value="manual_c">Vento I/II</option>
-    </select>
+    <select id="areaSelect" onchange="updateMachines()"></select>
+
+    <select id="machineSelect" onchange="updateVariants()"></select>
+
+    <select id="variantSelect" onchange="switchManual()"></select>
 
     <div id="chat"></div>
 
@@ -74,13 +74,24 @@
 
         const chatBox = document.getElementById("chat");
 
+        let manualTree = {};
 
 
         // ----------------------------
         // ASK FUNCTION (STREAMING)
         // ----------------------------
         async function ask() {
-            const manual = document.getElementById("manualSelect").value;
+            const area =
+                document.getElementById("areaSelect").value;
+
+            const machine =
+                document.getElementById("machineSelect").value;
+
+            const variant =
+                document.getElementById("variantSelect").value;
+
+            const manual = `${area}/${machine}/${variant}`; 
+
             const q = document.getElementById("q").value;
             if (!q) return;
 
@@ -116,6 +127,85 @@
             document.getElementById("q").value = "";
         }
 
+        // ----------------------------
+        // Load Manuals
+        // ----------------------------
+
+        async function loadManuals() {
+
+            const res = await fetch(`${BACKEND_URL}/manuals`);
+
+            manualTree = await res.json();
+
+            const areaSelect = document.getElementById("areaSelect");
+
+            areaSelect.innerHTML = "";
+
+            for (const area in manualTree) {
+
+                const option = document.createElement("option");
+
+                option.value = area;
+                option.textContent = area;
+
+                areaSelect.appendChild(option);
+            }
+
+            updateMachines();
+        }
+
+
+        function updateMachines() {
+
+            const area = document.getElementById("areaSelect").value;
+
+            const machineSelect =
+                document.getElementById("machineSelect");
+
+            machineSelect.innerHTML = "";
+
+            for (const machine in manualTree[area]) {
+
+                const option = document.createElement("option");
+
+                option.value = machine;
+                option.textContent = machine;
+
+                machineSelect.appendChild(option);
+            }
+
+            updateVariants();
+        }
+
+        function updateVariants() {
+
+            const area =
+                document.getElementById("areaSelect").value;
+
+            const machine =
+                document.getElementById("machineSelect").value;
+
+            const variantSelect =
+                document.getElementById("variantSelect");
+
+            variantSelect.innerHTML = "";
+
+            const variants = manualTree[area][machine];
+
+            variants.forEach(variant => {
+
+                const option = document.createElement("option");
+
+                option.value = variant;
+                option.textContent = variant;
+
+                variantSelect.appendChild(option);
+            });
+
+            switchManual();
+        }
+
+
 
         // ----------------------------
         // CLEAR CHAT
@@ -130,16 +220,18 @@
 
             chatBox.innerText = "";
         }
-    </script>
 
-    <script>
-    // Enter to send
-    document.getElementById("q").addEventListener("keydown", function(event) {
-        if (event.key === "Enter" && !event.shiftKey) {
-            event.preventDefault(); // prevent newline / form submit
-            ask();
-        }
-    });
+         
+
+        // Enter to send
+        document.getElementById("q").addEventListener("keydown", function(event) {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault(); // prevent newline / form submit
+                ask();
+            }
+        });
+
+        loadManuals();
     </script>
 
 </body>
