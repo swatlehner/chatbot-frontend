@@ -52,6 +52,13 @@
 
     <select id="variantSelect" onchange="switchManual()"></select>
 
+    <br><br>
+
+    <img
+        id="machineImage"
+        style="max-width:400px; max-height:250px;"
+    >
+
     <div id="chat"></div>
 
     <input id="q" placeholder="Ask a question...">
@@ -201,11 +208,25 @@
 
                 variantSelect.appendChild(option);
             });
-
+            
+            updateImage();
             switchManual();
         }
 
+        function updateImage() {
 
+            const area =
+                document.getElementById("areaSelect").value;
+
+            const machine =
+                document.getElementById("machineSelect").value;
+
+            const variant =
+                document.getElementById("variantSelect").value;
+
+            document.getElementById("machineImage").src =
+                `${BACKEND_URL}/image/${area}/${machine}/${variant}`;
+        }
 
         // ----------------------------
         // CLEAR CHAT
