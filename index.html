@@ -159,6 +159,7 @@
             }
 
             updateMachines();
+            preloadImages();
         }
 
 
@@ -226,6 +227,24 @@
 
             document.getElementById("machineImage").src =
                 `${BACKEND_URL}/image/${area}/${machine}/${variant}`;
+        }
+
+
+        async function preloadImages() {
+
+            for (const area in manualTree) {
+
+                for (const machine in manualTree[area]) {
+
+                    for (const variant of manualTree[area][machine]) {
+
+                        const img = new Image();
+
+                        img.src =
+                            `${BACKEND_URL}/image/${area}/${machine}/${variant}`;
+                    }
+                }
+            }
         }
 
         // ----------------------------
