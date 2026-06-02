@@ -64,6 +64,9 @@
     <input id="q" placeholder="Ask a question...">
     <button onclick="ask()">Send</button>
 
+    <h3>Documents</h3>
+
+    <div id="documents"></div>
 
 
     <script>
@@ -247,6 +250,53 @@
             }
         }
 
+
+        // ----------------------------
+        // Set up files for download
+        // ----------------------------
+
+        async function updateDocuments() {
+
+            const area =
+                document.getElementById("areaSelect").value;
+
+            const machine =
+                document.getElementById("machineSelect").value;
+
+            const variant =
+                document.getElementById("variantSelect").value;
+
+            const res = await fetch(
+                `${BACKEND_URL}/files/${area}/${machine}/${variant}`
+            );
+
+            const files = await res.json();
+
+            const container =
+                document.getElementById("documents");
+
+            container.innerHTML = "";
+
+            files.forEach(file => {
+
+                const link = document.createElement("a");
+
+                link.href =
+                    `${BACKEND_URL}/download/${area}/${machine}/${variant}/${encodeURIComponent(file)}`;
+
+                link.textContent = "📄 " + file;
+
+                link.target = "_blank";
+
+                container.appendChild(link);
+
+                container.appendChild(
+                    document.createElement("br")
+                );
+            });
+        }
+
+
         // ----------------------------
         // CLEAR CHAT
         // ----------------------------
@@ -260,6 +310,7 @@
 
             chatBox.innerText = "";
             updateImage();
+            updateDocuments();
         }
 
          
