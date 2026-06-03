@@ -109,7 +109,8 @@
             chatBox.innerText +=
                 "\n\n🧑 You: " + q +
                 "\n🤖 Searching manual...\n";
-
+            chatBox.scrollTop = chatBox.scrollHeight;
+            
             const res = await fetch(`${BACKEND_URL}/ask`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
@@ -141,7 +142,6 @@
                                 "🤖 Searching manual...\n",
                                 "🤖 Bot: "
                             );
-                        chatBox.scrollTop = chatBox.scrollHeight;
                         firstChunk = false;
                     }
 
