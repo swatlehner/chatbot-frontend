@@ -106,7 +106,9 @@
             if (!q) return;
 
             // Show user message
-            chatBox.innerText += "\n\n🧑 You: " + q + "\n🤖 Bot: ";
+            chatBox.innerText +=
+                "\n\n🧑 You: " + q +
+                "\n🤖 Searching manual...\n";
 
             const res = await fetch(`${BACKEND_URL}/ask`, {
                 method: "POST",
@@ -122,14 +124,29 @@
             const decoder = new TextDecoder("utf-8");
 
             let done = false;
+            let firstChunk = true;
 
             while (!done) {
                 const { value, done: doneReading } = await reader.read();
                 done = doneReading;
 
                 if (value) {
+
                     const chunk = decoder.decode(value);
+
+                    if (firstChunk) {
+
+                        chatBox.innerText =
+                            chatBox.innerText.replace(
+                                "🤖 Searching manual...\n",
+                                "🤖 Bot: "
+                            );
+
+                        firstChunk = false;
+                    }
+
                     chatBox.innerText += chunk;
+
                     chatBox.scrollTop = chatBox.scrollHeight;
                 }
             }
