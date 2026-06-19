@@ -30,17 +30,11 @@
             margin-left: 5px;
         }
 
-        /* Base styles and transition setup */
-        #feedbackStatus { 
-        margin-top: 8px; 
-        color: black;
-        opacity: 1; 
-        transition: opacity 1s ease-in-out; 
-        } 
-
-        /* JavaScript should just toggle this single class on/off */
-        .feedback-visible { 
-        opacity: 1; 
+        #feedbackStatus {
+            margin-top: 8px;
+            color: black;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
         }
 
         .top-bar {
@@ -389,11 +383,10 @@
             // show status text
             status.innerText = "✓ Feedback saved";
 
-            status.className = "feedback-visible";
+            status.style.opacity = "1";
 
-            // fade out after 2 seconds
             setTimeout(() => {
-                status.className = "feedback-hidden";
+                status.style.opacity = "0";
             }, 2000);
         }
         // ----------------------------
