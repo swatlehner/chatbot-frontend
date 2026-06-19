@@ -64,6 +64,22 @@
     <input id="q" placeholder="Ask a question...">
     <button onclick="ask()">Send</button>
 
+    <br>
+
+    <div id="feedbackSection">
+
+        <button onclick="sendFeedback(1)">
+            👍 Helpful
+        </button>
+
+        <button onclick="sendFeedback(-1)">
+            👎 Not Helpful
+        </button>
+
+    </div>
+
+    <br>
+
     <h3>Documents</h3>
 
     <div id="documents"></div>
@@ -81,11 +97,10 @@
             session_id = crypto.randomUUID();
             localStorage.setItem("session_id", session_id);
         }
-
+        
         const chatBox = document.getElementById("chat");
 
         let manualTree = {};
-
 
         // ----------------------------
         // ASK FUNCTION (STREAMING)
@@ -314,6 +329,26 @@
         }
 
 
+
+
+        async function sendFeedback(value) {
+
+            await fetch(
+                `${BACKEND_URL}/feedback`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        session_id: session_id,
+                        feedback: value
+                    })
+                }
+            );
+
+            alert("Thank you for your feedback!");
+        }
         // ----------------------------
         // CLEAR CHAT
         // ----------------------------
