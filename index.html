@@ -30,19 +30,17 @@
             margin-left: 5px;
         }
 
-        #feedbackStatus {
-            margin-top: 8px;
-            opacity: 0;
-            transition: opacity 1s;
-        }
+        /* Base styles and transition setup */
+        #feedbackStatus { 
+        margin-top: 8px; 
+        color: black;
+        opacity: 0; 
+        transition: opacity 1s ease-in-out; 
+        } 
 
-        .feedback-visible {
-            opacity: 1;
-            color: black;
-        }
-
-        .feedback-hidden {
-            opacity: 0;
+        /* JavaScript should just toggle this single class on/off */
+        .feedback-visible { 
+        opacity: 1; 
         }
 
         .top-bar {
