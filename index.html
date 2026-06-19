@@ -30,6 +30,20 @@
             margin-left: 5px;
         }
 
+        #feedbackStatus {
+            margin-top: 8px;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        .feedback-visible {
+            opacity: 1;
+        }
+
+        .feedback-hidden {
+            opacity: 0;
+        }
+
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -68,13 +82,19 @@
 
     <div id="feedbackSection">
 
-        <button onclick="sendFeedback(1)">
+        <button
+            id="thumbsUp"
+            onclick="sendFeedback(1)">
             👍 Helpful
         </button>
 
-        <button onclick="sendFeedback(-1)">
+        <button
+            id="thumbsDown"
+            onclick="sendFeedback(-1)">
             👎 Not Helpful
         </button>
+
+        <div id="feedbackStatus"></div>
 
     </div>
 
@@ -347,7 +367,35 @@
                 }
             );
 
-            alert("Thank you for your feedback!");
+            const up =
+                document.getElementById("thumbsUp");
+
+            const down =
+                document.getElementById("thumbsDown");
+
+            const status =
+                document.getElementById("feedbackStatus");
+
+            // reset labels
+            up.innerText = "👍 Helpful";
+            down.innerText = "👎 Not Helpful";
+
+            // mark selected button
+            if (value === 1) {
+                up.innerText = "✓ 👍 Helpful";
+            } else {
+                down.innerText = "✓ 👎 Not Helpful";
+            }
+
+            // show status text
+            status.innerText = "✓ Feedback saved";
+
+            status.className = "feedback-visible";
+
+            // fade out after 2 seconds
+            setTimeout(() => {
+                status.className = "feedback-hidden";
+            }, 2000);
         }
         // ----------------------------
         // CLEAR CHAT
